@@ -1,8 +1,8 @@
 import mesa
 from mesa.visualization import SolaraViz, make_space_component, make_plot_component
-from typing import Dict
+from typing import Dict, Any
 from disease_on_network.model import IllnessModel
-from disease_on_network.agent import PersonAgent
+from disease_on_network.agent import PersonAgent, State
 
 
 def agent_portrayal(agent: PersonAgent) -> Dict[str, Any]:
