@@ -1,3 +1,10 @@
+import mesa
+from mesa.visualization import SolaraViz, make_space_component, make_plot_component
+from typing import Dict
+from disease_on_network.model import IllnessModel
+from disease_on_network.agent import PersonAgent
+
+
 def agent_portrayal(agent: PersonAgent) -> Dict[str, Any]:
     """
     Provide rendering instructions for nodes based on disease state.
@@ -16,8 +23,6 @@ def agent_portrayal(agent: PersonAgent) -> Dict[str, Any]:
 
 
 # Define the interactive parameters
-import mesa
-
 model_params = {
 
     "num_nodes": mesa.visualization.Slider(
