@@ -1,6 +1,6 @@
-import mesa
 import enum
-from typing import List
+
+import mesa
 
 
 class Direction(enum.Enum):
@@ -80,7 +80,6 @@ class CarAgent(mesa.Agent):
                 self.red_light_wait_time += 1
 
 
-
 class IntersectionController(mesa.Agent):
     """
     A meta-agent that controls the traffic lights at an intersection.
@@ -90,15 +89,21 @@ class IntersectionController(mesa.Agent):
         lights (List[TrafficLightAgent]): The lights managed by this controller.
     """
 
-    def __init__(self, model: mesa.Model, smart: bool,
-                 lights: List[TrafficLightAgent], sensor_range: int = 5, static_wait = 15):
+    def __init__(
+        self,
+        model: mesa.Model,
+        smart: bool,
+        lights: list[TrafficLightAgent],
+        sensor_range: int = 5,
+        static_wait=15,
+    ):
         super().__init__(model)
         self.smart = smart
         self.static_wait = static_wait
-        self.lights = {l.direction: l for l in lights} # Dictionary
+        self.lights = {light.direction: light for light in lights}  # Dictionary
         self.sensor_range = sensor_range
         self.timer = 0
-        self.cooldown = 2 # Minimum steps before a light can change again
+        self.cooldown = 2  # Minimum steps before a light can change again
 
     def get_queue_density(self, light: TrafficLightAgent) -> int:
         """
@@ -111,9 +116,11 @@ class IntersectionController(mesa.Agent):
             check_x = (light.pos[0] - dx * i) % self.model.grid.width
             check_y = (light.pos[1] - dy * i) % self.model.grid.height
 
-
             check_pos = (check_x, check_y)
-            if any(isinstance(a, CarAgent) for a in self.model.grid.get_cell_list_contents([check_pos])):
+            if any(
+                isinstance(a, CarAgent)
+                for a in self.model.grid.get_cell_list_contents([check_pos])
+            ):
                 count += 1
         return count
 
@@ -122,9 +129,10 @@ class IntersectionController(mesa.Agent):
         Switches all lights managed by the controller.
         """
         for light in self.lights.values():
-            light.state = LightState.GREEN if light.state == LightState.RED else LightState.RED
+            light.state = (
+                LightState.GREEN if light.state == LightState.RED else LightState.RED
+            )
         self.timer = 0
-
 
     def step(self):
         self.timer += 1
@@ -144,7 +152,9 @@ class IntersectionController(mesa.Agent):
                 north_queue = self.get_queue_density(north_light)
 
                 # If the current green light has a smaller queue than the red light, toggle
-                if east_light.state == LightState.GREEN and north_queue > east_queue:
-                    self.toggle_lights()
-                elif north_light.state == LightState.GREEN and east_queue > north_queue:
+                if (
+                    east_light.state == LightState.GREEN and north_queue > east_queue
+                ) or (
+                    north_light.state == LightState.GREEN and east_queue > north_queue
+                ):
                     self.toggle_lights()
