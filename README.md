@@ -15,6 +15,7 @@ This model simulates the spread of an infectious disease through a social or phy
 
 An optimization simulation where traffic light agents use local information to minimize vehicle wait times at intersections.
 
+![Simulation of Smart Traffic Controller](./assets/chrome-capture-2026-03-09_TrafficModel_Mesa.gif)
 
 ## Features
 Both models have implemented a Solara visualization script and a normal python script for fast parameter testing.
