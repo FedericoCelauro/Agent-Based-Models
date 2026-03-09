@@ -26,6 +26,7 @@ def traffic_portrayal(agent: mesa.Agent) -> Dict[str, Any]:
         return {
             "color": "tab:blue" if agent.direction == Direction.EAST else "tab:purple",
             "marker": "s",  # Square for cars
+            "zorder": 0,  # Ensure lights are drawn above cars
             "size": 40,
         }
     return {}
