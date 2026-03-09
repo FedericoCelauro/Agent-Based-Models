@@ -1,7 +1,7 @@
 import mesa
 from mesa.visualization import SolaraViz, make_plot_component, make_space_component
 from typing import Dict, Any
-from smart_traffic_lights.agent import TrafficLightAgent, CarAgent
+from smart_traffic_lights.agents import TrafficLightAgent, CarAgent, LightState, Direction
 from smart_traffic_lights.model import TrafficModel
 
 
