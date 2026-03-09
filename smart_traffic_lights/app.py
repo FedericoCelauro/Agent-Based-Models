@@ -1,11 +1,17 @@
+from typing import Any
+
 import mesa
 from mesa.visualization import SolaraViz, make_plot_component, make_space_component
-from typing import Dict, Any
-from smart_traffic_lights.agents import TrafficLightAgent, CarAgent, LightState, Direction
+from smart_traffic_lights.agents import (
+    CarAgent,
+    Direction,
+    LightState,
+    TrafficLightAgent,
+)
 from smart_traffic_lights.model import TrafficModel
 
 
-def traffic_portrayal(agent: mesa.Agent) -> Dict[str, Any]:
+def traffic_portrayal(agent: mesa.Agent) -> dict[str, Any]:
     """
     Determines how agents are drawn on the grid.
 
@@ -35,39 +41,19 @@ def traffic_portrayal(agent: mesa.Agent) -> Dict[str, Any]:
 # Define interactive parameters for Solara UI
 model_params = {
     "width": mesa.visualization.Slider(
-        label="Width of the grid",
-        value=20,
-        min=5,
-        max=40,
-        step=1
+        label="Width of the grid", value=20, min=5, max=40, step=1
     ),
     "height": mesa.visualization.Slider(
-        label="Height of the grid",
-        value=20,
-        min=5,
-        max=40,
-        step=1
+        label="Height of the grid", value=20, min=5, max=40, step=1
     ),
     "num_cars_east": mesa.visualization.Slider(
-        label="Number of cars going east",
-        value=8,
-        min=1,
-        max=20,
-        step=1
+        label="Number of cars going east", value=8, min=1, max=20, step=1
     ),
     "num_cars_north": mesa.visualization.Slider(
-        label="Number of cars going north",
-        value=8,
-        min=1,
-        max=20,
-        step=1
+        label="Number of cars going north", value=8, min=1, max=20, step=1
     ),
     "smart_lights": mesa.visualization.Slider(
-        label="Smart Lights (0=Off, 1=On)",
-        value=1,
-        min=0,
-        max=1,
-        step=1
+        label="Smart Lights (0=Off, 1=On)", value=1, min=0, max=1, step=1
     ),
 }
 
@@ -91,4 +77,4 @@ app = SolaraViz(
 )
 
 
-app
+# app
