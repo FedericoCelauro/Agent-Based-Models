@@ -1,5 +1,5 @@
 import numpy as np
-from smart_traffic_lights import TrafficModel
+from smart_traffic_lights.model import TrafficModel
 
 STEPS = 2000
 
