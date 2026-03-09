@@ -1,5 +1,21 @@
 import mesa
-from .agents import TrafficLightAgent, CarAgent, IntersectionController
+from .agents import TrafficLightAgent, CarAgent, IntersectionController, LightState, Direction
+
+
+
+def track_total_wait_time(model: mesa.Model) -> int:
+    """
+    Helper function for the DataCollector to compute total wait time.
+    """
+    return sum(a.total_wait_time for a in model.agents if isinstance(a, CarAgent))
+
+
+def track_red_light_wait_time(model: mesa.Model) -> int:
+    """
+    Helper function for the DataCollector to compute total wait time.
+    """
+    return sum(a.red_light_wait_time for a in model.agents if isinstance(a, CarAgent))
+
 
 
 class TrafficModel(mesa.Model):
