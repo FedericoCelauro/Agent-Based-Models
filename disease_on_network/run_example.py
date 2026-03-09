@@ -32,7 +32,7 @@ for _ in range(150):
 
 ## Without link dynamics
 
-print("###### Starting Simulation with link dynamics inactive ######")
+print(f"\n\n###### Starting Simulation with link dynamics inactive ######")
 
 modelStatic = IllnessModel(
         num_nodes = 500,
