@@ -3,6 +3,7 @@ from mesa.discrete_space import Network
 from mesa.discrete_space import CellAgent
 from mesa.datacollection import DataCollector
 import networkx as nx
+from .agent import PersonAgent, State
 
 
 class IllnessModel(mesa.Model):
