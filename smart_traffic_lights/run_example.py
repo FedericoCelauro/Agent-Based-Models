@@ -27,19 +27,25 @@ smart_df = model_smart.datacollector.get_model_vars_dataframe()
 final_wait_static = static_df["Total_Red_Light_Wait_Time"].iloc[-1]
 final_wait_smart = smart_df["Total_Red_Light_Wait_Time"].iloc[-1]
 
-improvement = np.round((final_wait_static - final_wait_smart) / final_wait_static * 100, 2)
+improvement = np.round(
+    (final_wait_static - final_wait_smart) / final_wait_static * 100, 2
+)
 
 print("-" * 40)
 print(f"Results after {STEPS} steps:")
 print(f"Total Red Light Wait Time (Static Lights): {final_wait_static} steps")
 print(f"Total Red Light Wait Time (Smart Lights) : {final_wait_smart} steps")
-print(f"Performance Improvement        : {improvement}% reduction in red light wait time")
+print(
+    f"Performance Improvement        : {improvement}% reduction in red light wait time"
+)
 print("-" * 40)
 
 final_wait_static = static_df["Total_Wait_Time"].iloc[-1]
 final_wait_smart = smart_df["Total_Wait_Time"].iloc[-1]
 
-improvement = np.round((final_wait_static - final_wait_smart) / final_wait_static * 100, 2)
+improvement = np.round(
+    (final_wait_static - final_wait_smart) / final_wait_static * 100, 2
+)
 
 print("-" * 40)
 print(f"Total Wait Time (Static Lights): {final_wait_static} steps")
