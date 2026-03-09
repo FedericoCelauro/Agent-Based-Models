@@ -1,7 +1,7 @@
+from enum import IntEnum
+
 import mesa
 from mesa.discrete_space import CellAgent
-from enum import IntEnum
-from typing import Dict
 
 
 class State(IntEnum):
@@ -9,7 +9,6 @@ class State(IntEnum):
     INFECTED = 1
     RECOVERED = 2
     DEAD = 3
-
 
 
 class PersonAgent(CellAgent):
@@ -25,25 +24,21 @@ class PersonAgent(CellAgent):
         wants_open: Whether the agent wants to keep links open.
     """
 
-
     def __init__(
         self,
         model: mesa.Model,
         mod_infect: float,
         mod_recover: float,
-        mod_caution: float
+        mod_caution: float,
     ) -> None:
-
-        """ Initialize a new agent. """
+        """Initialize a new agent."""
 
         super().__init__(model)
         self.state = State.SUSCEPTIBLE
         self.mod_infect = mod_infect
         self.mod_recover = mod_recover
         self.mod_caution = mod_caution
-        self.link_opinions: Dict[int, bool] = {}
-
-
+        self.link_opinions: dict[int, bool] = {}
 
     def update_link_opinions(self, link_activity: float) -> None:
         """
@@ -61,13 +56,10 @@ class PersonAgent(CellAgent):
             if nid not in self.link_opinions:
                 self.link_opinions[nid] = True
 
-
             # High global caution = lower threshold to close links
             threshold = link_activity * (1.0 / self.mod_caution)
 
             self.link_opinions[nid] = self.model.random.random() < threshold
-
-
 
     def step(self) -> None:
         if self.state == State.DEAD:
@@ -78,8 +70,6 @@ class PersonAgent(CellAgent):
             self._try_infect_neighbors()
             self._try_recover_or_die()
 
-
-
     def _try_infect_neighbors(self) -> None:
         """
         Attempts to infect neighbors via active links only.
@@ -87,18 +77,15 @@ class PersonAgent(CellAgent):
 
         # Loop on the neighbors
         for neighbor_cell in self.cell.neighborhood:
-
             if not neighbor_cell.agents:
                 continue
 
             neighbor_agent = neighbor_cell.agents[0]
             nid = neighbor_cell.coordinate
 
-
             # Update link status
             my_opinion = self.link_opinions.get(nid, True)
             their_opinion = neighbor_agent.link_opinions.get(self.cell.coordinate, True)
-
 
             # Only active links spread infection
             if not (my_opinion and their_opinion):
@@ -111,8 +98,6 @@ class PersonAgent(CellAgent):
                 if self.model.random.random() < prob:
                     neighbor_agent.state = State.INFECTED
 
-
-
     def _try_recover_or_die(self) -> None:
         """
         Determines if the agent recovers or dies.
@@ -123,11 +108,9 @@ class PersonAgent(CellAgent):
             self.state = State.DEAD
 
             # Set all existing link opinions to False
-            self.link_opinions = {nid: False for nid in self.link_opinions}
+            self.link_opinions = dict.fromkeys(self.link_opinions, False)
             return
-
 
         # Try recover
         if self.model.random.random() < (self.model.pr * self.mod_recover):
             self.state = State.RECOVERED
-
