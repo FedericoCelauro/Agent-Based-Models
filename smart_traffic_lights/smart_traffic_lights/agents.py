@@ -1,5 +1,6 @@
 import mesa
 import enum
+from typing import List
 
 
 class Direction(enum.Enum):
@@ -147,17 +148,3 @@ class IntersectionController(mesa.Agent):
                     self.toggle_lights()
                 elif north_light.state == LightState.GREEN and east_queue > north_queue:
                     self.toggle_lights()
-
-
-def track_total_wait_time(model: mesa.Model) -> int:
-    """
-    Helper function for the DataCollector to compute total wait time.
-    """
-    return sum(a.total_wait_time for a in model.agents if isinstance(a, CarAgent))
-
-
-def track_red_light_wait_time(model: mesa.Model) -> int:
-    """
-    Helper function for the DataCollector to compute total wait time.
-    """
-    return sum(a.red_light_wait_time for a in model.agents if isinstance(a, CarAgent))
