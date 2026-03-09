@@ -61,6 +61,7 @@ class IllnessModel(mesa.Model):
 
         # Create and place agents
         for cell in self.grid.all_cells:
+            
             # Generate random modifiers
             mod_infect = self.random.uniform(0.8, 1.2)
             mod_recover = self.random.uniform(0.8, 1.2)
@@ -81,7 +82,7 @@ class IllnessModel(mesa.Model):
                 agent.state = State.INFECTED
 
 
-        # Data Collection (Updated for Object access)
+        # Data Collection
         self.datacollector = DataCollector(
             model_reporters={
                 "Susceptible": lambda m: m.get_state_count(State.SUSCEPTIBLE),
@@ -144,7 +145,6 @@ class IllnessModel(mesa.Model):
                 agent_v = cell_v.agents[0]
 
                 # Logic: Link is active only if both consent
-                # Using .get(target, False) handles cases where agents are dead/uninitialized
                 op_u = agent_u.link_opinions.get(v, True)
                 op_v = agent_v.link_opinions.get(u, True)
 
