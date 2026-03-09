@@ -40,15 +40,15 @@ modelStatic = IllnessModel(
         seed = None
         )
 
-    for _ in range(150):
+for _ in range(150):
 
-        inf = modelStatic.datacollector.get_model_vars_dataframe()['Infected'].iloc[-1]
-        dead = modelStatic.datacollector.get_model_vars_dataframe()['Dead'].iloc[-1]
-        print(f"Step {modelStatic.steps}: Infected count = {inf}, Death count = {dead}")
+    inf = modelStatic.datacollector.get_model_vars_dataframe()['Infected'].iloc[-1]
+    dead = modelStatic.datacollector.get_model_vars_dataframe()['Dead'].iloc[-1]
+    print(f"Step {modelStatic.steps}: Infected count = {inf}, Death count = {dead}")
 
-        if inf == 0:
-            break
-        modelStatic.step()
+    if inf == 0:
+        break
+    modelStatic.step()
 
 
 
