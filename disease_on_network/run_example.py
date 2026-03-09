@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 
 ## With link dynamics
 
+print("###### Starting Simulation with link dynamics active ######")
+
 modelDynamic = IllnessModel(
     num_nodes = 500,
     avg_degree = 8,
@@ -29,6 +31,9 @@ for _ in range(150):
 
 
 ## Without link dynamics
+
+print("###### Starting Simulation with link dynamics inactive ######")
+
 modelStatic = IllnessModel(
         num_nodes = 500,
         avg_degree = 8,
