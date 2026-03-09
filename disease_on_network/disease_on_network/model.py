@@ -1,8 +1,8 @@
 import mesa
-from mesa.discrete_space import Network
-from mesa.discrete_space import CellAgent
-from mesa.datacollection import DataCollector
 import networkx as nx
+from mesa.datacollection import DataCollector
+from mesa.discrete_space import Network
+
 from .agent import PersonAgent, State
 
 
@@ -10,7 +10,9 @@ class IllnessModel(mesa.Model):
     """
     A network model for simulating disease spread with dynamic link behavior.
     """
+
     steps = 0
+
     def __init__(
         self,
         *,
@@ -21,8 +23,8 @@ class IllnessModel(mesa.Model):
         p_mortality: float = 0.05,
         initial_infected: int = 5,
         link_dynamics: bool = True,
-        seed = None,
-        **kwargs
+        seed=None,
+        **kwargs,
     ) -> None:
         """
         Args:
@@ -53,25 +55,21 @@ class IllnessModel(mesa.Model):
 
         # For visualization
         self.pos = nx.spring_layout(
-            self.G,
-            k=0.01 / (num_nodes**0.5),
-            iterations=100,
-            seed=42
+            self.G, k=0.01 / (num_nodes**0.5), iterations=100, seed=42
         )
 
         # Create and place agents
         for cell in self.grid.all_cells:
-            
             # Generate random modifiers
             mod_infect = self.random.uniform(0.8, 1.2)
             mod_recover = self.random.uniform(0.8, 1.2)
-            mod_caution = self.random.gauss(1.0, 0.35) # Caution modifier
+            mod_caution = self.random.gauss(1.0, 0.35)  # Caution modifier
 
             agent = PersonAgent(
                 model=self,
                 mod_infect=mod_infect,
                 mod_recover=mod_recover,
-                mod_caution=mod_caution
+                mod_caution=mod_caution,
             )
 
             # Move agent to its cell
@@ -81,7 +79,6 @@ class IllnessModel(mesa.Model):
             if cell.coordinate < initial_infected:
                 agent.state = State.INFECTED
 
-
         # Data Collection
         self.datacollector = DataCollector(
             model_reporters={
@@ -90,49 +87,40 @@ class IllnessModel(mesa.Model):
                 "Infected": lambda m: m.get_state_count(State.INFECTED),
                 "Dead": lambda m: m.get_state_count(State.DEAD),
                 "Active_Links": lambda m: m.count_active_links(),
-                "Global_Caution": lambda m: m.link_activity
+                "Global_Caution": lambda m: m.link_activity,
             }
         )
 
         self.update_state_counts()
         self.datacollector.collect(self)
 
-
     def update_state_counts(self) -> None:
         """Helper to count agents in a specific state."""
-        counts = {s: 0 for s in State}
+        counts = dict.fromkeys(State, 0)
         for agent in self.agents:
             counts[agent.state] += 1
         self._current_state_counts = counts
-
 
     def get_state_count(self, state: State) -> int:
         """Retrieve cached state counts."""
         return self._current_state_counts.get(state, 0)
 
-
     def count_active_links(self) -> int:
         """Helper to count active edges."""
         return sum(1 for _, _, data in self.G.edges(data=True) if data.get("active"))
 
-
-
     def step(self) -> None:
-
         # Update global awareness
         infected = self.get_state_count(State.INFECTED)
         dead = self.get_state_count(State.DEAD)
 
         risk_factor = (infected + dead) / self.num_nodes
-        self.link_activity = max(0.0, 1.0 - (risk_factor)*3)
-
+        self.link_activity = max(0.0, 1.0 - (risk_factor) * 3)
 
         # Update links
         if self.link_dynamics:
             for agent in self.agents:
                 agent.update_link_opinions(self.link_activity)
-
-
 
         # Update network edges
         for u, v in self.G.edges():
@@ -148,8 +136,7 @@ class IllnessModel(mesa.Model):
                 op_u = agent_u.link_opinions.get(v, True)
                 op_v = agent_v.link_opinions.get(u, True)
 
-                self.G[u][v]['active'] = op_u and op_v
-
+                self.G[u][v]["active"] = op_u and op_v
 
         # Step
         self.agents.shuffle_do("step")
